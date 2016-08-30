@@ -10,19 +10,30 @@ import _thread
 maxin = 750000 
 maxout = 64000
 
+#set colors
 colorIn =   [0,   255,   0]
 colorOut =  [255,   0,   0]
 colorBoth = [150,   0, 150]
+
+
 
 # init unicorn hat
 unicorn.set_layout(unicorn.AUTO)
 unicorn.brightness(0.4)
 #unicorn.rotation(180)
 
+# get size
+width,height=unicorn.get_shape()
+steps = 100 / (height + 1)
+
+
+# target number of active LEDs
+ledIn = 0
+ledOut = 0
+
+
 
 def getRate():
-	#print ("getRate")
-
 	global ledIn, ledOut
 
 	error = False
@@ -61,19 +72,16 @@ def getRate():
 			percout = float(sendrate) / maxout * 100
 		
 		# calc number of LEDs to light (0-5)
-		ledIn = int( percin / 20)
-		ledOut = int( percout / 20)
+		ledIn = int( percin / steps)
+		ledOut = int( percout / steps)
 		#print ("IN:" + str(ledIn))
 
 
 def lightColumn(x,y,r,g,b):
-#	print(str(y))
 	for c in range(y):
 		unicorn.set_pixel(x,c,r,g,b)
 
 def paint():
-	#print ("paint!")
-
 	# register for last 8 LED values
 	rateIn = [0,0,0,0,0,0,0,0]
 	rateOut = [0,0,0,0,0,0,0,0]
@@ -91,7 +99,6 @@ def paint():
 
 		if ledIn < 0:
 			# error
-			#print("error")
 			for x in range(8):
 				for y in range(4):
 					unicorn.set_pixel(x,y,255,0,0)
