@@ -11,10 +11,10 @@ maxin = 750000
 maxout = 64000
 
 #set colors
-colorIn =   [0,   255,   0]
-colorOut =  [255,   0,   0]
-colorBoth = [150,   0, 150]
-
+colorIn =    [0,   255,   0]
+colorOut =   [255,   0,   0]
+colorBoth =  [0,   255, 255]
+colorError = [255, 255,   0]
 
 
 # init unicorn hat
