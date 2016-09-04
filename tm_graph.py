@@ -71,10 +71,9 @@ def getRate():
 		if sendrate != 0:
 			percout = float(sendrate) / maxout * 100
 		
-		# calc number of LEDs to light (0-5)
+		# calc number of LEDs to light
 		ledIn = int( percin / steps)
 		ledOut = int( percout / steps)
-		#print ("IN:" + str(ledIn))
 
 
 def lightColumn(x,y,r,g,b):
@@ -101,7 +100,7 @@ def paint():
 			# error
 			for x in range(8):
 				for y in range(4):
-					unicorn.set_pixel(x,y,255,0,0)
+					unicorn.set_pixel(x, y, colorError[0], colorError[1], colorError[2])
 			unicorn.show()
 		else:
 			#remove oldest values
@@ -110,12 +109,13 @@ def paint():
 
 			#add new values
 			rateIn = [ledIn] + rateIn
+
 			rateOut = [ledOut] + rateOut
 
 			# turn all off
 			for x in range(8):
 				for y in range(4):
-					unicorn.set_pixel(x,y,0,0,0)
+					unicorn.set_pixel(x,y, 0, 0, 0)
 
 			# paint input
 			for x in range(8):
@@ -123,9 +123,9 @@ def paint():
 					lightColumn(x, rateIn[x], colorBoth[0], colorBoth[1], colorBoth[2])
 				elif rateIn[x] > rateOut[x]:
 					lightColumn(x, rateIn[x], colorIn[0], colorIn[1], colorIn[2])
-					lightColumn(x, rateOut[x], 250, 0, 0)
+					lightColumn(x, rateOut[x], colorOut[0], colorOut[1], colorOut[2])
 				else:
-					lightColumn(x, rateOut[x],250,0,0)
+					lightColumn(x, rateOut[x], colorOut[0], colorOut[1], colorOut[2])
 					lightColumn(x, rateIn[x], colorIn[0], colorIn[1], colorIn[2])
 
 			if ledIn == 0 and ledOut == 0:

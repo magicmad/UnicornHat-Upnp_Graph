@@ -5,9 +5,15 @@ import time
 import sys,subprocess
 import _thread
 
+
 # set max bandwidth
 maxin = 750000 
 maxout = 64000
+
+#set colors
+colorIn =    [0,   255,   0]
+colorOut =   [255,   0,   0]
+colorError = [255, 255,   0]
 
 
 # init unicorn hat
@@ -15,14 +21,18 @@ unicorn.set_layout(unicorn.AUTO)
 unicorn.rotation(180)
 unicorn.brightness(0.2)
 
+# get size
+width,height=unicorn.get_shape()
+steps = 100 / (width + 1)
+
+
 # target number of active LEDs
 ledIn = 0
 ledOut = 0
 
 
-def getRate():
-	#print ("getRate")
 
+def getRate():
 	global ledIn, ledOut
 
 	while 1:
@@ -61,29 +71,23 @@ def getRate():
 					percout = float(sendrate) / maxout * 100
 				
 				# calc number of LEDs to light
-				ledIn = int( percin / 11.11)
-				ledOut = int( percout / 11.11)
+				ledIn = int( percin / steps)
+				ledOut = int( percout / steps)
 
-			#print ("IN:" + str(ledIn))
-			#time.sleep(0.1)
 
 def paint():
-	#print ("paint!")
-
-	# number of active LEDs (0-8)
+	# number of active LEDs
 	curIn = 0
 	curOut = 0
 	
 	while 1:
-		#print ("IN2:" + str(ledIn))
-
 		curInPre = curIn
 		curOutPre = curOut
 
 		if ledIn < 0:
 			for x in range(8):
 				for y in range(4):
-					unicorn.set_pixel(x,y,255,0,0)
+					unicorn.set_pixel(x, y, colorError[0], colorError[1], colorError[2])
 			unicorn.show()
 		else:
 			if curIn < ledIn:
@@ -107,17 +111,18 @@ def paint():
 
 			# paint input
 			for x in range(curIn):
-				unicorn.set_pixel(x,0,0,250,0)
-				unicorn.set_pixel(x,1,0,250,0)
+				unicorn.set_pixel(x, 0, colorIn[0], colorIn[1], colorIn[2])
+				unicorn.set_pixel(x, 1, colorIn[0], colorIn[1], colorIn[2])
 			
 			# paint output
 			for x in range(curOut):
-				unicorn.set_pixel(x,2,250,0,0)
-				unicorn.set_pixel(x,3,250,0,0)
+				unicorn.set_pixel(x, 2, colorOut[0], colorOut[1], colorOut[2])
+				unicorn.set_pixel(x, 3, colorOut[0], colorOut[1], colorOut[2])
 			
 			unicorn.show()
 
 		time.sleep(0.07)
+
 
 #create unicorn tread 
 #create upnp query thread
