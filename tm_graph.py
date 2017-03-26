@@ -4,11 +4,13 @@ import unicornhat as unicorn
 import time
 import sys,subprocess
 import _thread
+import os
 
 
-# set max bandwidth
-maxin = 750000 
-maxout = 64000
+# set max bandwidth in bytes per second
+maxin =  5000000
+maxout = 1000000
+
 
 #set colors
 colorIn =    [0,   255,   0]
@@ -41,7 +43,7 @@ def getRate():
 			
 	# get xml from router
 	try:
-		rate = str(subprocess.check_output(["/home/pi/upnp/connection_rate.sh"]))
+		rate = str(subprocess.check_output([os.getcwd() + "/connection_rate.sh"]))
 	except subprocess.CalledProcessError:
 		error = True
 
@@ -61,6 +63,8 @@ def getRate():
 	else:
 		sendrate = sendrate[1][1:-2]
 		receiverate = receiverate[1][1:-2]
+
+		print ("r: " + str(receiverate))
 
 		percin = 0
 		percout = 0
@@ -94,7 +98,7 @@ def paint():
 
 		# TEST
 		#ledIn = 3
-		#ledOut = 3
+		#ledOut = 2
 
 		if ledIn < 0:
 			# error
